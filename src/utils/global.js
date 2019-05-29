@@ -29,7 +29,8 @@ class Global extends Emitter {
     jwtLevel: this.JWT_LEVEL.BEGINNER
   };
   getGlobalProp(prop) {
-    return this.state.prop;
+    console.log(this.state);
+    return this.state[prop];
   }
   getAll() {
     return this.state;

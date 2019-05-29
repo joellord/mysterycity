@@ -22,6 +22,7 @@ import Stickers from "./slides/Stickers";
 import OAuth from "./slides/OAuth";
 import JWT from "./slides/JWT";
 import JwtAnatomy from "./slides/JwtAnatomy";
+import ThankYou from "./slides/ThankYou";
 
 import ImgImplicit1 from "./img/oauth-implicit-1.svg";
 import ImgImplicit2 from "./img/oauth-implicit-2.svg";
@@ -46,6 +47,13 @@ import ImgAuthServer2 from "./img/auth-server-2.svg";
 import ImgAuthServer3 from "./img/auth-server-3.svg";
 import ImgAuthServer4 from "./img/auth-server-4.svg";
 import ImgAuthHeader from "./img/authheader.png";
+import ImgOpenIdConnect1 from "./img/oidc-1.svg";
+import ImgOpenIdConnect2 from "./img/oidc-2.svg";
+import ImgOpenIdConnect3 from "./img/oidc-3.svg";
+import ImgOpenIdConnect4 from "./img/oidc-4.svg";
+import ImgOpenIdConnect5 from "./img/oidc-5.svg";
+
+import ImgBye from "./img/bye1.gif";
 
 import global from "./utils/global";
 
@@ -54,10 +62,33 @@ const BACKFRONT = global.BACKFRONT;
 const OAUTH_LEVEL = global.OAUTH_LEVEL;
 const JWT_LEVEL = global.JWT_LEVEL;
 
+const PRESENTATION_TIME_MINUTES = 50;
+const QUESTION_TIMEOUT = 30;
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = global.getAll();
+
+    const timeLeft = () => {
+      const now = (new Date()).getTime();
+      const start = global.getGlobalProp("startTs") || now - 2000;
+      const duration = (now - start)/1000;
+      const timeLeft = (PRESENTATION_TIME_MINUTES * 60) - duration;
+      let minutes = Math.floor(timeLeft/60);
+      let seconds = Math.round(timeLeft % 60);
+      minutes = minutes < 10 ? `0${minutes}` : minutes;
+      seconds = seconds < 10 ? `0${seconds}` : seconds;
+      return `${minutes}:${seconds}`;
+    };
+
+    const self = this;
+    const timer = () => {
+      global.setGlobalProp("timeLeft", timeLeft());
+      console.log(self.state.timeLeft);
+      setTimeout(timer, 30000);
+    };
+    timer();
 
     this.updateState = this.updateState.bind(this);
   }
@@ -75,8 +106,6 @@ export default class App extends Component {
   }
 
   render() {
-    console.log("Language", this.state.lang);
-    const QUESTION_TIMEOUT = 30;
     const SLIDES = {
       TEST_QUESTION: 6,
       LANGUAGE: 14,
@@ -92,14 +121,19 @@ export default class App extends Component {
       TOKENS_START: 93,
       JWT_LEVEL: 97,
       SECURE_APPS: 113,
-      AUTH_API_DEMO: 131
+      AUTH_API_DEMO: 131,
+      LAST_SECTION: 138,
+      OIDC_ANALOGY_START: 139,
+      OIDC_START: 147,
+      HACKJWT: 153,
+      CLOSING: 150
     };
 
     return (
       <div className="App">
         <DeckOnSteroids swipeToChange={false}>
           {/*0*/}
-          <TalkTitle/>
+          <TalkTitle nextSlide="0" previousSlide="0" />
 
           {/*1*/}
           <About/>
@@ -1050,10 +1084,145 @@ def protected_admindata():
           <Callback/>
 
           {/*135*/}
-          <ContactAPI />
+          <ContactAPI url="/protecteddata" />
+
+          {/*136*/}
+          <Slide>
+            <Subtitle>Securing you applications</Subtitle>
+            <List>
+              <Text>Back end: Add a middleware to check for a JWT</Text>
+              <Text>Front end: Add an Authorization header to requests</Text>
+              <Text>Delegate sensitive data to a third party</Text>
+            </List>
+          </Slide>
+
+          {/*137*/}
+          <GetReady/>
+
+          {/*138*/}
+          <QuizSlide quiz={{
+            code: "NEW_QUESTION",
+            id: 11,
+            question: "We're running out of time. What else do you want to know?",
+            choices: [
+              {
+                value: 1,
+                moveToSlide: SLIDES.OIDC_ANALOGY_START,
+                text: "Tell me a story about Open ID Connect."
+              },
+              {
+                value: 2,
+                moveToSlide: SLIDES.OIDC_START,
+                text: "Quickly explain Open ID Connect"
+              },
+              {
+                value: 3,
+                moveToSlide: SLIDES.AUTH_API_DEMO + 10,
+                text: "Show me how JWTs can be hacked"
+              },
+              {
+                value: 4,
+                moveToSlide: SLIDES.CLOSING,
+                text: "Let's just end this talk now."
+              }
+            ]
+          }} countdown={QUESTION_TIMEOUT}/>
+
+          {/*139*/}
+          <StorySlide
+            image="mayorrich"
+            text="'Thank you for saving our village', the mayor says. 'You have my eternal gratitude. How can we ever repay you?'"
+          />
+          {/*140*/}
+          <StorySlide
+            image="cloud"
+            text="'Well, there is one thing', you reply. 'I still don't know who I am and how I ended up here'."
+          />
+          {/*141*/}
+          <StorySlide
+            image="mayorrichthink"
+            text="'Unfortunately, I can't help you with that. It seems like you just appeared here. But wait! The Echantress should know.
+              By giving us the pigeon, she gave us the permission to ask for other information. Let's send another request.'"
+          />
+          {/*142*/}
+          <StorySlide
+            image="pigeon"
+            text="The mayor takes the pigeon and attaches a new message to its leg. {scope: 'openid profile'} it says."
+          />
+          {/*143*/}
+          <StorySlide
+            image="mayorrich"
+            text="'We should hear back from the Enchantress soon.'"
+          />
+          {/*144*/}
+          <StorySlide
+            image="enchantress2"
+            text="When the Enchantress receives the pigeon, she immediately recognizes the seal from the mayor. She uses her magic to find your identity and
+              writes everything up on a scroll which she sends back to the village with the carrier pigeon."
+          />
+          {/*145*/}
+          <StorySlide
+            image="mayorread"
+            text="Finally, the mayor receives the message and is able to reveal you your true identity."
+          />
+          {/*146*/}
+          <Slide>
+            <Title>Quest complete!</Title>
+            <Subtitle>What have we learned here?</Subtitle>
+          </Slide>
+
+          {/*147*/}
+          <SectionSlide text="Open ID Connect" />
+
+          {/*148*/}
+          <OAuthGrant
+            flow="Open ID Connect"
+            image={ImgOpenIdConnect1}
+          />
+          {/*149*/}
+          <OAuthGrant
+            flow="Open ID Connect"
+            image={ImgOpenIdConnect2}
+          />
+          {/*150*/}
+          <OAuthGrant
+            flow="Open ID Connect"
+            image={ImgOpenIdConnect3}
+          />
+          {/*151*/}
+          <OAuthGrant
+            flow="Open ID Connect"
+            image={ImgOpenIdConnect4}
+          />
+          {/*152*/}
+          <OAuthGrant
+            flow="Open ID Connect"
+            image={ImgOpenIdConnect5}
+            nextSlide={(this.state.timeLeft.split(":")[0] < 10) ? SLIDES.CLOSING : SLIDES.HACKJWT}
+          />
+
+          {/*153*/}
+          <SectionSlide text="Hacking JWTs"/>
+
 
 
           {/*Resources: Horse Battery Staple xkcd comic: https://xkcd.com/936/ */}
+          <Slide>
+            <Title>Resources</Title>
+            <Text>Here are some resources</Text>
+            <List>
+              <li><a href="https://jwt.io">Jwt.io</a></li>
+              <li><a href="https://ezurl.to/oauth-talk">Full OAuth Talk</a></li>
+              <li><a href="https://auth0.com/blog/a-look-at-the-latest-draft-for-jwt-bcp/">JWT Vulnerabilities</a></li>
+              <li><a href="https://xkcd.com/936/">Horse Battery Staple (XKCD)</a></li>
+            </List>
+          </Slide>
+
+          <Slide>
+            <Image src={ImgBye} full />
+          </Slide>
+
+          <ThankYou />
 
         </DeckOnSteroids>
       </div>

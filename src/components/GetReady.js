@@ -3,6 +3,8 @@ import { Slide, Title, Subtitle } from "@sambego/diorama";
 import slide from "../utils/SlideState";
 
 export default class GetReady extends Component {
+  timer;
+
   constructor(props) {
     super(props);
 
@@ -14,8 +16,12 @@ export default class GetReady extends Component {
     this.decreaseTimer();
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
   decreaseTimer() {
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.setState({countdown: this.state.countdown - 1});
       if (this.state.countdown >= 0) {
         this.decreaseTimer();

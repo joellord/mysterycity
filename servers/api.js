@@ -5,6 +5,24 @@ const crypto = require("crypto");
 const app = express();
 app.use(cors());
 
+app.get("/protecteddata", (req, res) => {
+  console.log("Requesting /protecteddata");
+  //Check for an Authorization header
+  if (!req.headers.authorization || !req.headers.authorization.match(" ")) {
+    res.status(401).send("No authorization header found");
+    return;
+  }
+
+  //Get the JWT (Authorization: Bearer ..token..
+  const jwt = req.headers.authorization.split(" ")[1];
+  let payload = jwt.split(".")[1];
+  payload = JSON.parse(Buffer.from(payload, "base64"));
+
+  console.log("JWT found, payload: ", JSON.stringify(payload));
+
+  res.status(200).send("Welcome !");
+});
+
 app.get("/admindata", (req, res) => {
   console.log("Requesting /admindata");
   //Check for an Authorization header

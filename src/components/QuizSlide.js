@@ -8,13 +8,14 @@ import slide from "../utils/SlideState";
 import global from "../utils/global";
 
 export default class QuizSlide extends Component {
+  timer;
+
   constructor(props) {
     super(props);
 
     let state = {
       quiz: this.props.quiz,
       answers: {
-
       },
       countdown: this.props.countdown
     };
@@ -28,10 +29,11 @@ export default class QuizSlide extends Component {
 
   componentWillMount() {
     Realtime.subscribeToAnswers(this.handleIncomingAnswers);
-    setTimeout(this.decreaseCounter, 1000);
+    this.decreaseCounter();
   }
 
   componentWillUnmount() {
+    clearTimeout(this.timer);
     Realtime.unsubscribeFromAnswers(this.handleIncomingAnswers);
   }
 
@@ -57,12 +59,12 @@ export default class QuizSlide extends Component {
       slide.gotoSlide(matchingChoice.moveToSlide);
 
     } else {
-      setTimeout(this.decreaseCounter, 1000);
+      this.timer = setTimeout(this.decreaseCounter, 1000);
     }
   }
 
   handleIncomingAnswers(data) {
-    let answers = this.state.answers;
+    let answers = Object.assign({}, this.state.answers);
     answers[data.value] = (answers[data.value] + 1) || 1;
     this.setState({answers});
   }

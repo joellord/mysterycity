@@ -15,6 +15,11 @@ import ImgEnchantress from "../img/enchantress.jpg";
 import ImgPigeon from "../img/pigeon.jpg";
 import ImgMayor2 from "../img/mayor2.jpg";
 import ImgFireworks from "../img/fireworks.jpg";
+import ImgMayorRich from "../img/mayorrich.jpg";
+import ImgMayorRichThinking from "../img/mayorrichthink.jpg";
+import ImgCloud from "../img/cloud.jpg";
+import ImgEnchantress2 from "../img/enchantress2.jpg";
+import ImgMayorRead from "../img/mayorread.jpg";
 
 export default class StorySlide extends Component {
   render() {
@@ -71,6 +76,21 @@ export default class StorySlide extends Component {
         break;
       case "fireworks":
         img = ImgFireworks;
+        break;
+      case "mayorrich":
+        img = ImgMayorRich;
+        break;
+      case "mayorrichthink":
+        img = ImgMayorRichThinking;
+        break;
+      case "cloud":
+        img = ImgCloud;
+        break;
+      case "enchantress2":
+        img = ImgEnchantress2;
+        break;
+      case "mayorread":
+        img = ImgMayorRead;
         break;
       default:
         img = ImgForest;
