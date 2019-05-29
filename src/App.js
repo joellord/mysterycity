@@ -22,6 +22,9 @@ import Stickers from "./slides/Stickers";
 import OAuth from "./slides/OAuth";
 import JWT from "./slides/JWT";
 import JwtAnatomy from "./slides/JwtAnatomy";
+import JwtEditor from "./slides/JWTEditor";
+import Pitfall from "./slides/Pitfall";
+import BruteForce from "./slides/BruteForce";
 import ThankYou from "./slides/ThankYou";
 
 import ImgImplicit1 from "./img/oauth-implicit-1.svg";
@@ -52,8 +55,14 @@ import ImgOpenIdConnect2 from "./img/oidc-2.svg";
 import ImgOpenIdConnect3 from "./img/oidc-3.svg";
 import ImgOpenIdConnect4 from "./img/oidc-4.svg";
 import ImgOpenIdConnect5 from "./img/oidc-5.svg";
+import ImgPitfall1 from "./img/signature.jpg";
+import ImgPitfall2 from "./img/none.jpg";
+import ImgPitfall3 from "./img/weak.jpg";
+import ImgPitfall4 from "./img/confused.jpg";
+import ImgPitfall5 from "./img/storage.jpg";
 
 import ImgBye from "./img/bye1.gif";
+import ImgThankYou from "./img/thankyou2.gif";
 
 import global from "./utils/global";
 
@@ -126,7 +135,7 @@ export default class App extends Component {
       OIDC_ANALOGY_START: 139,
       OIDC_START: 147,
       HACKJWT: 153,
-      CLOSING: 150
+      CLOSING: 188
     };
 
     return (
@@ -1117,7 +1126,7 @@ def protected_admindata():
               },
               {
                 value: 3,
-                moveToSlide: SLIDES.AUTH_API_DEMO + 10,
+                moveToSlide: SLIDES.HACKJWT,
                 text: "Show me how JWTs can be hacked"
               },
               {
@@ -1204,9 +1213,172 @@ def protected_admindata():
           {/*153*/}
           <SectionSlide text="Hacking JWTs"/>
 
+          {/*154*/}
+          <Login title="" authServer="http://localhost:8080" />
+          {/*155*/}
+          <Callback/>
+          {/*156*/}
+          <ContactAPI />
+          {/*157*/}
+          <JwtEditor/>
+          {/*158*/}
+          <ContactAPI />
+          {/*159*/}
+          <Pitfall img={ImgPitfall1} number="1" title="No Signature Check" />
+          {/*160*/}
+          <Slide>
+            <Title>Signature Checks</Title>
+            <List>
+              <li>Prevents Tampering</li>
+              <li>Always check, don't rely on JWT presence</li>
+            </List>
+          </Slide>
+          {/*161*/}
+          <CodeSlide title="On the API">
+            {`
+// Validate authenticity
+const jwtParts = jwt.split(".");
+const data = jwtParts[0] + "." + jwtParts[1];
+          `}
+          </CodeSlide>
+          {/*162*/}
+          <CodeSlide title="On the API">
+            {`
+// Validate authenticity
+// ...
+switch(jwtParts[0].alg) {
+  case "HS256":
+  //...
+}
+          `}
+          </CodeSlide>
+          {/*163*/}
+          <CodeSlide title="On the API">
+            {`
+// Validate authenticity
+// ...
+// Generate a signature
+signature = crypto
+  .createHmac("sha256", "abcd")
+  .update(data)
+  .digest("base64");
+          `}
+          </CodeSlide>
+          {/*164*/}
+          <CodeSlide title="On the API">
+            {`
+// Validate authenticity
+// Generate a signature
+// ...
+// Compare with token
+if (signature !== jwtParts[2]) {
+  res.status(401).send("Invalid signature");
+  return;
+}
+          `}
+          </CodeSlide>
+          {/*165*/}
+          <ContactAPI url="/adminwithsig" />
+          {/*166*/}
+          <JwtEditor />
+          {/*167*/}
+          <ContactAPI url="/adminsigcheck" />
+          {/*168*/}
+          <Pitfall img={ImgPitfall2} number="2" title="The alg: none Attack" />
+          {/*169*/}
+          <Slide>
+            <Subtitle>Alg:None</Subtitle>
+            <List>
+              <li>Part of the standard</li>
+              <li>If you don't accept it, check for it</li>
+            </List>
+          </Slide>
+          {/*170*/}
+          <BruteForce/>
+          {/*171*/}
+          <JwtEditor/>
+          {/*172*/}
+          <ContactAPI url="/adminwithsig" />
+          {/*173*/}
+          <Pitfall img={ImgPitfall3} number="3" title="Weak Secret Key" />
+          {/*174*/}
+          <Slide>
+            <Title>Signatures</Title>
+            <List>
+              <li>Keep It Secret</li>
+              <li>Don't use HMAC, too easy to compute</li>
+              <li>Use strong keys if you do (64 chars, [a-zA-Z0-9+_-])</li>
+            </List>
+          </Slide>
+          {/*175*/}
+          <CodeSlide title="Longer secrets">
+            {`
+let token = jwt.sign({
+  sub: user.id,
+  admin: false,
+  username: user.username
+}, "This-Is_a_V3ry/LongKey andIs+Much!Better");
+          `}
+          </CodeSlide>
+          {/*176*/}
+          <Login title="New Secure Server Login" authServer="http://localhost:8181" />
+          {/*177*/}
+          <Callback />
+          {/*178*/}
+          <ContactAPI url="/adminwithsig" />
+          {/*179*/}
+          <Pitfall img={ImgPitfall4} number="4" title="Confused Deputy Problem" />
+          {/*180*/}
+          <Slide>
+            <Title>Confused Deputy</Title>
+            <Text>A confused deputy is a legitimate, more privileged computer program that is tricked by another program into misusing its authority on the system</Text>
+          </Slide>
+          {/*181*/}
+          <Slide>
+            <Title>Extra Claims</Title>
+            <List>
+              <li>iss</li>
+              <li>aud</li>
+              <li>exp</li>
+            </List>
+          </Slide>
+          {/*182*/}
+          <CodeSlide title="Confused Deputy">
+            {`
+if (payload.iss !== "ugly-little-auth-server") {
+  res.status(401).send("I don't trust this server");
+  return;
+}
 
+if (payload.aud !== "my-simple-api") {
+  res.status(401).send("This token is not meant for this API");
+  return;
+}
+          `}
+          </CodeSlide>
+          {/*183*/}
+          <ContactAPI url="/adminclaimcheck" />
+          {/*184*/}
+          <Slide>
+            <Subtitle>Or checking the AUD</Subtitle>
+          </Slide>
+          {/*185*/}
+          <ContactAPI url="/adminaudcheck" />
+          {/*186*/}
+          <Pitfall img={ImgPitfall5} number="5" title="Storing your JWTs and impersonation" />
+          {/*187*/}
+          <Slide>
+            <Title>DON'T STORE YOUR JWTs</Title>
+            <List>
+              <li>No storage is safe</li>
+              <li>localStorage is the best but check your node_modules folder</li>
+              <li>Keep them in memory</li>
+            </List>
+          </Slide>
 
-          {/*Resources: Horse Battery Staple xkcd comic: https://xkcd.com/936/ */}
+          {/*188*/}
+          <SectionSlide text="Almost done!"/>
+          {/*189*/}
           <Slide>
             <Title>Resources</Title>
             <Text>Here are some resources</Text>
@@ -1217,12 +1389,16 @@ def protected_admindata():
               <li><a href="https://xkcd.com/936/">Horse Battery Staple (XKCD)</a></li>
             </List>
           </Slide>
-
+          {/*190*/}
           <Slide>
             <Image src={ImgBye} full />
           </Slide>
-
+          {/*191*/}
           <ThankYou />
+          {/*192*/}
+          <Slide>
+            <Image src={ImgThankYou} full/>
+          </Slide>
 
         </DeckOnSteroids>
       </div>
