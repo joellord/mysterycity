@@ -1,0 +1,38 @@
+import React, { Component } from "react";
+import { Slide, Title, Subtitle } from "@sambego/diorama";
+import slide from "../utils/SlideState";
+
+export default class GetReady extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {countdown: 5};
+    this.decreaseTimer = this.decreaseTimer.bind(this);
+  }
+
+  componentWillMount() {
+    this.decreaseTimer();
+  }
+
+  decreaseTimer() {
+    setTimeout(() => {
+      this.setState({countdown: this.state.countdown - 1});
+      if (this.state.countdown >= 0) {
+        this.decreaseTimer();
+      } else {
+        slide.nextSlide();
+      }
+    }, 1000)
+  }
+
+  render() {
+    return (
+      <Slide>
+        <Title>Time for a Question!</Title>
+        <Subtitle>Get Ready!</Subtitle>
+        <Title>{this.state.countdown}</Title>
+        <Subtitle><a href="https://ezurl.to/idcity">https://ezurl.to/idcity</a></Subtitle>
+      </Slide>
+    )
+  }
+}

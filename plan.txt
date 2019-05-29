@@ -1,0 +1,31 @@
+1. Welcome, About, Intro, etc
+
+2. App test (wanna use it)?
+
+3. Stack: Front-End/Back-end/Full-stack/Non tech
+
+4. Language: Javascript/PHP/Python
+
+5. OAuth, why? -- Where should we start? --- Check conditional rendering (if start === jwt, nextslide = something)
+
+6. Implicit Grant: Tell me more/Refresh my memory/Skip
+
+  6.1 Story about troll and bridge 
+  6.2 Chart and arrows
+  6.3 Also skip 7
+
+7. Access Code Grant: Tell me more/Refresh my memory/Skip
+
+  7.1 Story about wizard and shit
+  7.2 Chart and arrows
+
+8. JWTs: Explain in details/See how vulnerable they are/Skip
+
+  8.1 Anatomy of a JWT
+
+    8.1.1 Code and demo: Show/Demo only/Skip
+
+  8.2 Code and demo, then Hacking JWTs talk
+  8.3 Skip ?
+
+9. 
