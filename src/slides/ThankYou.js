@@ -10,6 +10,7 @@ export default class ThankYou extends Component {
         <Text>Beer City Code - Grand Rapids, MI - June 1, 2019</Text>
         <br/>
         <Subtitle><a href="https://ezurl.to/idcity-resources" style={{"textTransform": "none"}}>ezurl.to/idcity-resources</a></Subtitle>
+        <Text>Music from https://soundimage.org</Text>
       </Slide>
     )
   }

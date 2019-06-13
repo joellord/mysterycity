@@ -7,6 +7,8 @@ import Realtime from "../utils/Ably";
 import slide from "../utils/SlideState";
 import global from "../utils/global";
 
+import AudQuiz from "../audio/quiz.mp3";
+
 export default class QuizSlide extends Component {
   timer;
 
@@ -75,6 +77,9 @@ export default class QuizSlide extends Component {
     }, 0);
     return (
       <Slide>
+        <audio autoplay="autoplay">
+          <source src={AudQuiz} type="audio/mpeg"></source>
+        </audio>
         <Title>{this.state.quiz.question}</Title>
         <div style={{textAlign: "left"}}>
           {this.state.quiz.choices.map((a, index) => {

@@ -58,25 +58,22 @@ button {
 
 .diorama-footer-left {
   position: fixed;
-  bottom: 2rem;
+  bottom: 1rem;
   left: 2rem;
   padding: 0 0 0 3rem;
   background: transparent url("img/twitter.png") 0 0.5rem no-repeat;
   background-size: 2rem;
   box-shadow: none;
-  color: #1b2b34;
+  /*color: #1b2b34;*/
   font-weight: 700;
   text-decoration: none;
 }
 
-.diorama-footer-right {
-  position: fixed;
-  bottom: 2rem;
-  right: 0rem;
-  padding: 1rem 0rem 0rem 12rem;
-  background: transparent url("img/auth0-logo-forlightbg.png") 0 0 no-repeat;
-  background-size: 10rem;
-  box-shadow: none;
+.diorama-footer {
+  background: darkblue;
+  opacity: 0.6;
+  color: #fff;
+  padding: 10px 40px !important;
 }
 
 btnGroup {

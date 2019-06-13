@@ -16,6 +16,7 @@ export default class TalkTitle extends Component {
               <li>Technical Evangelist @ Auth0</li>
               <li>Author @ Udemy, Egghead</li>
               <li>Co-organizer @ NomadJs</li>
+              <li>[Astrophysicist] turned Engineer</li>
               <li><span role="img" aria-label="I heart">❤</span> Twitter @joel__lord</li>
             </List>
           </div>

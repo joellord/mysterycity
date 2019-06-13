@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 
-import { Slide, Title, Subtitle, Text, List, Browser, Image } from "@sambego/diorama";
+import { Slide, Title, Subtitle, Text, List, Browser, Image, Footer } from "@sambego/diorama";
 
 import TalkTitle from "./slides/TalkTitle";
 import About from "./slides/About";
@@ -115,6 +115,8 @@ export default class App extends Component {
   }
 
   render() {
+    const footer = <Footer left="@joel__lord&nbsp;&nbsp;&nbsp;#BCCGR" right="&nbsp;" />
+
     const SLIDES = {
       TEST_QUESTION: 6,
       LANGUAGE: 14,
@@ -140,7 +142,7 @@ export default class App extends Component {
 
     return (
       <div className="App">
-        <DeckOnSteroids swipeToChange={false}>
+        <DeckOnSteroids swipeToChange={false} footer={footer}>
           {/*0*/}
           <TalkTitle nextSlide="0" previousSlide="0" />
 
@@ -1207,7 +1209,7 @@ def protected_admindata():
           <OAuthGrant
             flow="Open ID Connect"
             image={ImgOpenIdConnect5}
-            nextSlide={(this.state.timeLeft.split(":")[0] < 10) ? SLIDES.CLOSING : SLIDES.HACKJWT}
+            nextSlide={(this.state.timeLeft.split(":")[0] < 12) ? SLIDES.CLOSING : SLIDES.HACKJWT}
           />
 
           {/*153*/}
@@ -1394,11 +1396,11 @@ if (payload.aud !== "my-simple-api") {
             <Image src={ImgBye} full />
           </Slide>
           {/*191*/}
-          <ThankYou />
-          {/*192*/}
           <Slide>
             <Image src={ImgThankYou} full/>
           </Slide>
+          {/*192*/}
+          <ThankYou />
 
         </DeckOnSteroids>
       </div>
